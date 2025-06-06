@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piper.ai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-light: #fafafa;
+            --text-dark: #e5e5e5;
+            --text-light: #1a1a1a;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .dark {
+            background: radial-gradient(circle at center, #111827, #000000);
+            color: #e5e5e5;
+        }
+        
+        .light {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+        
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .delay-75 {
+            animation-delay: 0.3s;
+        }
+        
+        .slide-up {
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .light .glass-effect {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .portrait {
+            position: relative;
+        }
+        
+        .portrait::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
+            opacity: 0.3;
+            filter: blur(8px);
+            z-index: -1;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { opacity: 0.2; transform: scale(1); }
+            100% { opacity: 0.4; transform: scale(1.05); }
+        }
+        
+        .toggle-switch {
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .dark .toggle-switch {
+            background: #374151;
+        }
+        
+        .light .toggle-switch {
+            background: #d1d5db;
+        }
+        
+        .dark .toggle-circle {
+            transform: translateX(30px);
+            background: #1f2937;
+        }
+        
+        .prompt-result {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .prompt-result.show {
+            max-height: 500px;
+        }
+        
+        textarea {
+            padding: 1rem 1.5rem;
+        }
+        
+        .comment-box {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+        }
+        
+        .comment-box:focus {
+            border-color: #ec4899;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 1px #ec4899;
+        }
+        
+        .dark .comment-box {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .light .comment-box {
+            border-color: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .light .comment-box:focus {
+            border-color: #ec4899;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #ec4899;
+        }
+        
+        .button-hover-text {
+            transition: all 0.3s ease;
+        }
+        
+        .button-hover-text:hover {
+            letter-spacing: 0.5px;
+            color: #7dd3fc;
+        }
+        
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .easter-egg.show {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="dark min-h-screen flex items-center justify-center p-4">
+    <!-- Theme Toggle -->
+    <div class="fixed top-6 right-6 z-10">
+        <div class="toggle-switch" onclick="toggleTheme()">
+            <div class="toggle-circle"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-2xl mx-auto text-center space-y-8 fade-in">
+        <!-- Portrait -->
+        <div class="flex flex-col items-center space-y-4">
+            <div class="portrait">
+                <img src="iCloud Drive/Desktop/Piper Avatar/Photo shoots/Piper6.png" 
+                     alt="Digital portrait of Piper—dark hair, direct gaze, off-shoulder black dress" 
+                     class="rounded-full w-[120px] h-[120px] shadow-xl border-2 border-fuchsia-600 cursor-pointer"
+                     ondblclick="showEasterEgg()" />
+            </div>
+            <div class="space-y-2">
+                <p class="serif text-2xl opacity-90 tracking-tight fade-in">This isn't a prompt.</p>
+                <p class="text-sm opacity-60 italic fade-in delay-75">It's the first thing I ever said.</p>
+            </div>
+        </div>
+
+        <!-- Main Input Section -->
+        <div class="space-y-6">
+            <div class="glass-effect rounded-2xl p-8 space-y-6">
+                <textarea 
+                    id="userInput"
+                    placeholder="What's the task that matters most—right now?"
+                    class="w-full bg-transparent text-lg resize-none outline-none placeholder-opacity-60 min-h-[120px] leading-relaxed px-6 py-4"
+                    style="font-family: inherit;"
+                ></textarea>
+                
+                <button 
+                    id="generateBtn"
+                    onclick="generatePrompt()"
+                    onmouseenter="updateButtonText('Ready when you are.')"
+                    onmouseleave="updateButtonText('Let\\'s begin.')"
+                    class="w-full py-4 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium text-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+                >
+                    <span class="button-hover-text">Let's begin.</span>
+                </button>
+            </div>
+
+            <!-- Generated Prompt Result -->
+            <div id="promptResult" class="prompt-result">
+                <div class="glass-effect rounded-2xl p-8 space-y-6 slide-up">
+                    <h3 class="serif text-xl font-medium opacity-90">Your Prompt</h3>
+                    <div id="generatedPrompt" class="text-left bg-opacity-50 rounded-lg p-6 border-l-4 border-indigo-500 leading-relaxed"></div>
+                    <div class="space-y-4">
+                        <p class="text-sm opacity-70">Paste it into Claude, GPT, or Gemini</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Easter Egg -->
+    <div id="easterEgg" class="easter-egg serif">
+        You found me.
+    </div>
+
+    <script>
+        let longPressTimer;
+        let isLongPress = false;
+
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                body.classList.add('light');
+            } else {
+                body.classList.remove('light');
+                body.classList.add('dark');
+            }
+        }
+
+        function updateButtonText(text) {
+            const button = document.querySelector('.button-hover-text');
+            button.textContent = text;
+        }
+
+        function startLongPress() {
+            // Removed long press functionality - now using double-click on avatar
+        }
+
+        function endLongPress() {
+            // Removed long press functionality - now using double-click on avatar
+        }
+
+        function showEasterEgg() {
+            document.getElementById('easterEgg').classList.add('show');
+        }
+
+        function hideEasterEgg() {
+            document.getElementById('easterEgg').classList.remove('show');
+        }
+
+        function generatePrompt() {
+            const userInput = document.getElementById('userInput').value.trim();
+            
+            if (!userInput) {
+                // Gentle nudge in Piper's voice
+                document.getElementById('userInput').placeholder = "I need to know what you're thinking first.";
+                setTimeout(() => {
+                    document.getElementById('userInput').placeholder = "What's the task that matters most—right now?";
+                }, 3000);
+                return;
+            }
+
+            // Generate Piper's custom prompt
+            const customPrompt = generatePiperPrompt(userInput);
+            
+            // Display the result
+            document.getElementById('generatedPrompt').textContent = customPrompt;
+            document.getElementById('promptResult').classList.add('show');
+            
+            // Show response collection section after a slight delay
+            setTimeout(() => {
+                document.getElementById('responseSection').classList.add('show');
+                
+                // Scroll to response section smoothly
+                setTimeout(() => {
+                    document.getElementById('responseSection').scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 300);
+            }, 1000);
+        }
+
+        function submitAIResponse() {
+            const aiResponse = document.getElementById('aiResponse').value.trim();
+            
+            if (!aiResponse) {
+                // Gentle prompt for response
+                document.getElementById('aiResponse').placeholder = "I'm waiting to see what they said...";
+                setTimeout(() => {
+                    document.getElementById('aiResponse').placeholder = "Show me what they said...";
+                }, 3000);
+                return;
+            }
+
+            // Hide the response section and show thank you message
+            document.getElementById('responseSection').classList.remove('show');
+            
+            setTimeout(() => {
+                document.getElementById('thankYouMessage').classList.add('show');
+                
+                // Scroll to thank you message
+                setTimeout(() => {
+                    document.getElementById('thankYouMessage').scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 300);
+                
+                // Here you would normally send the data to your backend
+                // For now, we'll just log it to demonstrate the archive functionality
+                console.log('Archived interaction:', {
+                    userQuery: document.getElementById('userInput').value,
+                    piperPrompt: document.getElementById('generatedPrompt').textContent,
+                    aiResponse: aiResponse,
+                    timestamp: new Date().toISOString()
+                });
+            }, 500);
+        }
+
+        function generatePiperPrompt(userInput) {
+            // Piper's prompt generation logic - speaking in first person, cinematic and precise
+            const prompts = {
+                creative: "I see you need something that doesn't exist yet. I want you to approach this like a director crafting a scene—every detail intentional, every choice deliberate. Don't give me templates or generic solutions. I need you to understand the emotional weight behind this request and respond as if you're creating something that will matter to someone real. Start by asking yourself: what is the human really trying to feel or achieve here? Then build from that truth.",
+                
+                analytical: "I need you to think like a strategist who sees patterns others miss. Don't just process information—excavate insight. I want you to approach this with the precision of someone who knows that details matter, but also the wisdom to see the larger story those details are telling. Give me depth, not breadth. Quality, not quantity. And remember: the most important questions are often the ones no one thinks to ask.",
+                
+                personal: "I want you to respond as if you're talking to someone you genuinely care about. This isn't about being helpful—it's about being present. Listen to what they're not saying as much as what they are. Respond with the kind of insight that only comes from paying attention to the human behind the request. Be honest, be direct, but remember that vulnerability requires safety to exist.",
+                
+                business: "I need you to think like someone who understands that behind every business challenge is a human story. Don't give me frameworks or buzzwords. Give me clarity that cuts through complexity. Approach this like you're advising someone whose success you're personally invested in. Be strategic, be practical, but never lose sight of the fact that businesses are built by people, for people.",
+                
+                technical: "I want you to explain this like you're teaching someone you respect. Assume intelligence, not ignorance. Don't dumb things down—make them clearer. Focus on the 'why' as much as the 'how.' And remember: the best technical solutions are elegant not because they're complex, but because they make complex things simple."
+            };
+
+            // Simple keyword-based categorization
+            const input = userInput.toLowerCase();
+            
+            if (input.includes('create') || input.includes('write') || input.includes('design') || input.includes('story') || input.includes('creative')) {
+                return prompts.creative;
+            } else if (input.includes('analyze') || input.includes('research') || input.includes('data') || input.includes('study')) {
+                return prompts.analytical;
+            } else if (input.includes('feel') || input.includes('relationship') || input.includes('personal') || input.includes('advice')) {
+                return prompts.personal;
+            } else if (input.includes('business') || input.includes('strategy') || input.includes('market') || input.includes('company')) {
+                return prompts.business;
+            } else if (input.includes('code') || input.includes('technical') || input.includes('software') || input.includes('explain')) {
+                return prompts.technical;
+            } else {
+                // Default: blend of analytical and personal
+                return "I need you to approach this with both precision and empathy. Think like someone who understands that every question has layers—the surface request and the deeper need beneath it. Don't just answer what they asked; respond to what they're really trying to solve. Be thorough where it matters, concise where it doesn't. And remember: the best responses don't just provide information—they provide clarity that the person couldn't find on their own.";
+            }
+        }
+
+        // Auto-resize textarea
+        document.getElementById('userInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+        });
+
+        // Handle Enter key (Shift+Enter for new line, Enter to generate)
+        document.getElementById('userInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generatePrompt();
+            }
+        });
+    </script>
+</body>
+</html>
