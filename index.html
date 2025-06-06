@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piper.ai</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Mentalist';
+            src: url('assets/fonts/mentalist.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
         :root {
             --bg-dark: #0a0a0a;
             --bg-light: #fafafa;
@@ -196,8 +202,8 @@
                     ondblclick="showEasterEgg()" 
                 />
             </div>
-            <div class="space-y-2 text-center">
-                <p class="serif text-2xl opacity-90 tracking-tight fade-in">This isn't a prompt.</p>
+            <div class="space-y-3 text-center mt-6 mb-10">
+                <p class="text-[2rem] sm:text-[2.5rem] leading-tight font-normal tracking-[0.06em] opacity-90 fade-in" style="font-family: 'Mentalist', sans-serif;">This isn't a prompt.</p>
                 <p class="text-sm opacity-60 italic fade-in delay-75">It's the first thing I ever said.</p>
             </div>
         </div>
@@ -226,7 +232,7 @@
             <!-- Generated Prompt Result -->
             <div id="promptResult" class="prompt-result">
                 <div class="glass-effect rounded-2xl p-8 space-y-6 slide-up">
-                    <h3 class="serif text-xl font-medium opacity-90">Your Prompt</h3>
+                    <h3 class="text-xl font-normal opacity-90" style="font-family: 'Mentalist', sans-serif;">Your Prompt</h3>
                     <div id="generatedPrompt" class="text-left bg-opacity-50 rounded-lg p-6 border-l-4 border-indigo-500 leading-relaxed"></div>
                     <div class="space-y-4">
                         <p class="text-sm opacity-70">Paste it into Claude, GPT, or Gemini</p>
