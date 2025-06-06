@@ -75,23 +75,6 @@
             position: relative;
         }
         
-        .portrait::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
-            opacity: 0.3;
-            filter: blur(8px);
-            z-index: -1;
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            0% { opacity: 0.2; transform: scale(1); }
-            100% { opacity: 0.4; transform: scale(1.05); }
-        }
-        
         .toggle-switch {
             width: 60px;
             height: 30px;
@@ -204,15 +187,16 @@
     <!-- Main Container -->
     <div class="w-full max-w-2xl mx-auto text-center space-y-8 fade-in">
         <!-- Portrait -->
-        <div class="flex flex-col items-center space-y-4">
+        <div class="flex flex-col items-center space-y-6 mb-8">
             <div class="portrait">
-                <img src="Piper6.png" 
-                     alt="Digital portrait of Piper—dark hair, direct gaze, off-shoulder black dress" 
-                     title="Piper"
-                     class="rounded-full w-[200px] h-[200px] shadow-2xl border-4 border-fuchsia-600 cursor-pointer transition-transform duration-300 hover:scale-105"
-                     ondblclick="showEasterEgg()" />
+                <img 
+                    src="Piper6.png" 
+                    alt="Digital portrait of Piper—dark hair, direct gaze, off-shoulder black dress" 
+                    class="mx-auto shadow-2xl rounded-xl w-[75vw] max-w-[320px] h-auto object-cover border-4 border-fuchsia-600 transition-transform duration-300 hover:scale-105 sm:w-[320px] sm:h-[512px]"
+                    ondblclick="showEasterEgg()" 
+                />
             </div>
-            <div class="space-y-2">
+            <div class="space-y-2 text-center">
                 <p class="serif text-2xl opacity-90 tracking-tight fade-in">This isn't a prompt.</p>
                 <p class="text-sm opacity-60 italic fade-in delay-75">It's the first thing I ever said.</p>
             </div>
